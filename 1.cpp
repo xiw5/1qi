@@ -34,11 +34,16 @@ void qing()
 	  {
 //	     printf("2");
              string ss=map_it->first;
-	     fout<<ss;
+	     fout<<ss<<" ";
 	     for(int i=0;i!=ind[ss].size();i++)       
-		fout<<ind[ss][i].first<<":"<<ind[ss][i].second<<" ";
-             fout<<"\n";
+		{
+		   fout<<ind[ss][i].first<<":"<<ind[ss][i].second; 
+		   if(i!=ind[ss].size()-1)
+		     fout<<" ";
+		}
+	     fout<<"\n";
 	  }
+	ind.clear();
 //	fout<<"dsffs";
         fout.close();
 }
@@ -62,7 +67,7 @@ void chuli(char *cc)
                   ind[map_it->first].push_back(pa1);
 	  }	  
         fin.close();  
-	if(ind.size()>10000000)
+	if(ind.size()>2)
         qing();  
 }
 void dfs(char *cc)
@@ -105,43 +110,72 @@ void bing(int l,int r)
    creat(ch3,0777);
    fin.getline(ch11,MX);
    fin1.getline(ch22,MX);
-   ofstream fout(ch3);	
+   ofstream fout(ch3);
+   int kg=0;   
    for(;;)
     {
+      if(ch1[0]=='\0')
+	   {
+	     kg=1;
+	     break;
+	   }
+      if(ch2[0]=='\0')
+	   {
+	     kg=2;
+	     break;
+	   }
       if(strcmp(ch1,ch2)==0)
         {
-          fout<<ch1<<" "<<ch11<<" "<<ch22<<"\n";
+          fout<<ch1<<ch11<<ch22<<"\n";
           if(!(fin>>ch1))
-	    break;
-	  if(!(fin1>>ch1))
-	    break;
+	  {
+             kg=1;
+	     break;
+	  }
 	  fin.getline(ch11,MX);
+	  if(!(fin1>>ch2))
+	  {
+	     kg=2;
+	     break;
+	  }
 	  fin1.getline(ch22,MX);
 	}
       if(strcmp(ch1,ch2)<0)
 	{
-          fout<<ch1<<" "<<ch11<<"\n";
+          fout<<ch1<<ch11<<"\n";
 	  if(!(fin>>ch1))
+          {
+	     kg=1;
 	     break;
+	  }
 	  fin.getline(ch11,MX);	
 	}
       if(strcmp(ch1,ch2)>0)
 	{
-          fout<<ch2<<" "<<ch22<<"\n";
+          fout<<ch2<<ch22<<"\n";
 	  if(!(fin1>>ch2))
+	  {
+	     kg=2;
 	     break;
-	  fin.getline(ch22,MX);	
+	  }
+	  fin1.getline(ch22,MX);	
 	}
     }
-   for(;fin>>ch1;) 
+   if(kg==2)
+   for(;;) 
     {
+	 fout<<ch1<<ch11<<"\n";
+         if(!(fin>>ch1))
+	   break;
 	 fin.getline(ch11,MX);
-	 fout<<ch1<<" "<<ch11<<"\n";
     }
-   for(;fin1>>ch2;) 
+   if(kg==1)
+   for(;;) 
     {
-	 fin.getline(ch22,MX);
-	 fout<<ch2<<" "<<ch22<<"\n";
+	 fout<<ch2<<ch22<<"\n";
+	 if(!(fin1>>ch2))
+	   break;
+	 fin1.getline(ch22,MX);
     }
    fin.close();
    fin1.close();
