@@ -13,24 +13,24 @@
 #include<fstream>
 #include<fcntl.h>
 #define MX 1000000
-#define pa pair<string,int>
+#define pa pair<int,int>
 using namespace std;
-char ch[256];
+char ch[256],*CH[1000000];
 map<string,vector<pa> > ind;
 map<string,int> x;
-int sum;
+int sum,SUM;
 void qing()
 {
-        sum++;
-        char ch2[20];
+  sum++;
+  char ch2[20];
 	sprintf(ch2,"text%d",sum);
 	creat(ch2,0777);
-        ofstream fout(ch2);
+  ofstream fout(ch2);
 	map<string,vector<pa> >::iterator map_it;
-        map_it=ind.begin();
+  map_it=ind.begin();
 //	if(map_it==ind.end())
 //	  fout<<"Y"<<"\n";
-        for(;map_it!=ind.end();map_it++)
+  for(;map_it!=ind.end();map_it++)
 	  {
 //	     printf("2");
              string ss=map_it->first;
@@ -45,29 +45,26 @@ void qing()
 	  }
 	ind.clear();
 //	fout<<"dsffs";
-        fout.close();
+  fout.close();
 }
-void chuli(char *cc)
+void chuli(char *cc,int a)
 {
 	x.clear();
 	string s;
 	ifstream fin(cc);
 	for(;fin>>s;)
-	{
-           x[s]++;
-	 // printf("%d\n",x[s]); 
-	}
-	map<string,int>::iterator map_it;
-        map_it=x.begin();
-        for(;map_it!=x.end();map_it++)
+	  x[s]++;
+  map<string,int>::iterator map_it;
+  map_it=x.begin();
+  for(;map_it!=x.end();map_it++)
 	  {
 		  pa pa1;
-                  pa1=make_pair(cc,map_it->second);
+                  pa1=make_pair(a,map_it->second);
 		 // printf("1");
                   ind[map_it->first].push_back(pa1);
 	  }	  
         fin.close();  
-	if(ind.size()>2)
+	if(ind.size()>2000000)
         qing();  
 }
 void dfs(char *cc)
@@ -90,9 +87,14 @@ void dfs(char *cc)
                                   dfs(ch3);
 		}
 	      else
-		{
+		{   
+			   SUM++;  
+				 CH[SUM]=(char *)malloc(strlen(ch3)+1);
+         for(int i=0;i<strlen(ch3);i++)
+					 CH[SUM][i]=ch3[i];
+				 CH[SUM][strlen(ch3)]='\0';
 //	          printf("%s\n",ch3);
-                 chuli(ch3);
+         chuli(ch3,SUM);
 		}
 	   }
 	closedir(dir);
@@ -198,12 +200,18 @@ void guibing(int l,int r)
    bing(l,r);
 }
 int main()
-{
+{ 
 //	freopen("data","w",stdout);
 	scanf("%s",ch);
-        dfs(ch);
+  dfs(ch);
 	qing();
-        guibing(1,sum);
+  guibing(1,sum);
+	char ch[10]="lujing";
+	creat(ch,0777);
+	freopen("lujing","w",stdout);
+	for(int i=1;i<=SUM;i++)
+		printf("%s ",CH[i]);
+	fclose(stdout);
 	return 0;
 }
 //gui bing 1 hang
