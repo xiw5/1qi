@@ -13,24 +13,28 @@
 #include<fstream>
 #include<fcntl.h>
 #define MX 1000000
-#define pa pair<string,int>
+#define pa pair<int,int>
 using namespace std;
 char ch2[1000000],*CH[1000000];
-int SUM;
+pa A[1000000];
+int SUM,SUM1;
+bool cmp(pa a,pa b)
+{
+	return a.second<b.second;
+}
 void chuli()
 {
     char ch;
 		int n;
     for(;;)
       {
-	      scanf("%d",&n);
-				printf("%s:",CH[n]);
+	      scanf("%d",&A[SUM1].first);
 				ch=getchar();
-				scanf("%d",&n);
-				printf("%d\n",n);
+				scanf("%d",&A[SUM1].second);
 				ch=getchar();
         if(ch=='\n')
 					return;
+				SUM1++;
       }    
 }
 int main()
@@ -59,9 +63,13 @@ int main()
       	 else
           {
             chuli();
+						sort(A,A+SUM1,cmp);
+						for(int i=0;i<SUM1;i++)
+							printf("%s:%d\n",CH[A[i].first],A[i].second);
 	  			  break;
 	 			  }
       }
     fclose(stdin);
     return 0;
 }
+//ch2,CH

@@ -3,6 +3,7 @@
 #include<cstring>
 #include<dirent.h>
 #include<cstdlib>
+#include<ctime>
 #include<sys/stat.h>
 #include<sys/types.h>
 #include<unistd.h>
@@ -24,7 +25,6 @@ void qing()
   sum++;
   char ch2[20];
 	sprintf(ch2,"text%d",sum);
-	creat(ch2,0777);
   ofstream fout(ch2);
 	map<string,vector<pa> >::iterator map_it;
   map_it=ind.begin();
@@ -35,12 +35,11 @@ void qing()
 //	     printf("2");
     string ss=map_it->first;
 	  fout<<ss<<" ";
-	  for(int i=0;i!=ind[ss].size();i++)       
-		{
-		   fout<<ind[ss][i].first<<":"<<ind[ss][i].second; 
-		   if(i!=ind[ss].size()-1)
-		     fout<<" ";
-		}
+		int r=ind[ss].size();
+//    #pragma omp parallel for
+	  for(int i=0;i<r-1;i++)       
+		  fout<<ind[ss][i].first<<":"<<ind[ss][i].second<<" "; 
+		fout<<ind[ss][r-1].first<<":"<<ind[ss][r-1].second; 
 	  fout<<"\n";
 	}
 	ind.clear();
@@ -64,14 +63,14 @@ void chuli(char *cc,int a)
       ind[map_it->first].push_back(pa1);
 	  }	  
   fin.close();  
-	if(ind.size()>2000000)
+	if(ind.size()>5000000)
     qing();  
 }
 void dfs(char *cc)
 {
 	struct dirent *wenjian;
 	DIR *dir;
-    dir=opendir(cc);
+  dir=opendir(cc);
 	if(dir!=NULL)
 	  for(;(wenjian=readdir(dir))!=NULL;)
     {
@@ -86,16 +85,18 @@ void dfs(char *cc)
 			  if(strncmp(wenjian->d_name,".",1))
           dfs(ch3);
 		  }
-	    else
+	/*    else
 		  {   
 			  SUM++;  
 				CH[SUM]=(char *)malloc(strlen(ch3)+1);
-        for(int i=0;i<strlen(ch3);i++)
+				int ww=strlen(ch3);
+//        #pragma omp parallel for 
+				for(int i=0;i<ww;i++)
 				  CH[SUM][i]=ch3[i];
-				CH[SUM][strlen(ch3)]='\0';
+				CH[SUM][ww]='\0';
 //	          printf("%s\n",ch3);
         chuli(ch3,SUM);
-	 	  }
+	 	  }*/
 	   }
 	closedir(dir);
 
@@ -109,7 +110,6 @@ void bing(int l,int r)
 	ifstream fin1(cc1);
   fin>>ch1;
   fin1>>ch2;
-  creat(ch3,0777);
   fin.getline(ch11,MX);
   fin1.getline(ch22,MX);
   ofstream fout(ch3);
@@ -206,18 +206,21 @@ void guibing(int l,int r)
   bing(l,r);
 }
 int main()
-{ 
+{	
 //	freopen("data","w",stdout);
+	clock_t b1,b2;
+	b1=clock();
 	scanf("%s",ch);
   dfs(ch);
-	qing();
+/*	qing();
   guibing(1,sum);
-	char ch[10]="lujing";
-	creat(ch,0777);
-	freopen("lujing","w",stdout);
+	ofstream fout("lujing");
 	for(int i=1;i<=SUM;i++)
-		printf("%s ",CH[i]);
-	fclose(stdout);
+		fout<<CH[i]<<" ";
+	fout.close();*/
+	b2=clock();
+	double aa=(double)b2-b1;
+	printf("%f\n",aa/CLOCKS_PER_SEC);
 	return 0;
 }
 //gui bing 1 hang
