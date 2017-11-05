@@ -67,8 +67,8 @@ void chuli(char *cc,int a)
       ind[k][map_it->first].push_back(pa1);
 	  }	  
   fin.close();  
-	//if(ind[k].size()>1000000)
-   // qing(k);  
+	if(ind[k].size()>2000000)
+    qing(k);  
 }
 void dfs(char *cc)
 {
