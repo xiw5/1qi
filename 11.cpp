@@ -16,7 +16,7 @@
 #define MX 1000000
 #define pa pair<int,int>
 using namespace std;
-char ch[256],*CH[1000000];
+char ch[5000],*CH[1000000];
 map<string,vector<pa> > ind;
 map<string,int> x;
 int sum,SUM;
@@ -74,7 +74,7 @@ void dfs(char *cc)
 	if(dir!=NULL)
 	  for(;(wenjian=readdir(dir))!=NULL;)
     {
-      char ch3[256]; 
+      char ch3[5000]; 
 	    struct stat s;
 	    sprintf(ch3,"%s/%s",cc,wenjian->d_name);			  
 	     // printf("%s\n",wenjian->d_name);
