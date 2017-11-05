@@ -13,62 +13,58 @@
 #include<algorithm>
 #include<fstream>
 #include<fcntl.h>
-#include<omp.h>
 #define MX 1000000
 #define pa pair<int,int>
 using namespace std;
 char ch[256],*CH[1000000];
-map<string,vector<pa> > ind[4];
-map<string,int> x[4];
+map<string,vector<pa> > ind;
+map<string,int> x;
 int sum,SUM;
-void qing(int k)
+void qing()
 {
-	int a1;
-  #pragma omp critical
-	{sum++;a1=sum;}
+  sum++;
   char ch2[20];
-	sprintf(ch2,"text%d",a1);
+	sprintf(ch2,"tet%d",sum);
   ofstream fout(ch2);
 	map<string,vector<pa> >::iterator map_it;
-  map_it=ind[k].begin();
-//	if(map_it==ind.end());
+  map_it=ind.begin();
+//	if(map_it==ind.end())
 //	  fout<<"Y"<<"\n";
-  for(;map_it!=ind[k].end();map_it++)
+  for(;map_it!=ind.end();map_it++)
 	{
 //	     printf("2");
     string ss=map_it->first;
 	  fout<<ss<<" ";
-		int r=ind[k][ss].size();
+		int r=ind[ss].size();
 //    #pragma omp parallel for
 	  for(int i=0;i<r-1;i++)       
-		  fout<<ind[k][ss][i].first<<":"<<ind[k][ss][i].second<<" "; 
-		fout<<ind[k][ss][r-1].first<<":"<<ind[k][ss][r-1].second; 
+		  fout<<ind[ss][i].first<<":"<<ind[ss][i].second<<" "; 
+		fout<<ind[ss][r-1].first<<":"<<ind[ss][r-1].second; 
 	  fout<<"\n";
 	}
-	ind[k].clear();
+	ind.clear();
 //	fout<<"dsffs";
   fout.close();
 }
 void chuli(char *cc,int a)
 {
-	int k=omp_get_thread_num();
-	x[k].clear();
+	x.clear();
 	string s;
 	ifstream fin(cc);
 	for(;fin>>s;)
-	  x[k][s]++;
+	  x[s]++;
   map<string,int>::iterator map_it;
-  map_it=x[k].begin();
-  for(;map_it!=x[k].end();map_it++)
+  map_it=x.begin();
+  for(;map_it!=x.end();map_it++)
 	  {
 		  pa pa1;
       pa1=make_pair(a,map_it->second);
 		 // printf("1");
-      ind[k][map_it->first].push_back(pa1);
+      ind[map_it->first].push_back(pa1);
 	  }	  
   fin.close();  
-	//if(ind[k].size()>1000000)
-   // qing(k);  
+	if(ind.size()>5000000)
+    qing();  
 }
 void dfs(char *cc)
 {
@@ -107,10 +103,10 @@ void dfs(char *cc)
 }
 void bing(int l,int r)
 {
-  char ch1[1000],ch2[1000],cc[10],cc1[10],ch11[MX],ch22[MX],ch3[8]="zhong";
-  sprintf(cc,"text%d",l);
+  char ch1[100],ch2[100],cc[10],cc1[10],ch11[MX],ch22[MX],ch3[8]="zhong";
+  sprintf(cc,"tet%d",l);
   ifstream fin(cc);
-	sprintf(cc1,"text%d",(l+r)/2+1);
+	sprintf(cc1,"tet%d",(l+r)/2+1);
 	ifstream fin1(cc1);
   fin>>ch1;
   fin1>>ch2;
@@ -216,15 +212,12 @@ int main()
 	b1=clock();
 	scanf("%s",ch);
   dfs(ch);
-  #pragma omp parallel for
-	for(int i=SUM;i>0;i--)
-    chuli(CH[i],i);
-  #pragma omp parallel
-//  for(int i=0;i<4;i++)
-	qing(omp_get_thread_num());
-	printf("%d\n",sum);
+//	printf("%d\n",SUM);
+	for(int i=1;i<=SUM;i++)
+		chuli(CH[i],i);
+	qing();
   guibing(1,sum);
-	ofstream fout("lujing");
+	ofstream fout("lujing1");
 	for(int i=1;i<=SUM;i++)
 		fout<<CH[i]<<" ";
 	fout.close();
@@ -238,4 +231,3 @@ int main()
 //18 1000000 wenbenshu
 //105 1000000 yihang
 //105 100 yigedanci
-//duru
