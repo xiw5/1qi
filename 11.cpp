@@ -24,7 +24,7 @@ void qing()
 {
   sum++;
   char ch2[20];
-	sprintf(ch2,"tet%d",sum);
+	sprintf(ch2,"text%d",sum);
   ofstream fout(ch2);
 	map<string,vector<pa> >::iterator map_it;
   map_it=ind.begin();
@@ -104,9 +104,9 @@ void dfs(char *cc)
 void bing(int l,int r)
 {
   char ch1[100],ch2[100],cc[10],cc1[10],ch11[MX],ch22[MX],ch3[8]="zhong";
-  sprintf(cc,"tet%d",l);
+  sprintf(cc,"text%d",l);
   ifstream fin(cc);
-	sprintf(cc1,"tet%d",(l+r)/2+1);
+	sprintf(cc1,"text%d",(l+r)/2+1);
 	ifstream fin1(cc1);
   fin>>ch1;
   fin1>>ch2;
@@ -217,7 +217,7 @@ int main()
 		chuli(CH[i],i);
 	qing();
   guibing(1,sum);
-	ofstream fout("lujing1");
+	ofstream fout("lujing");
 	for(int i=1;i<=SUM;i++)
 		fout<<CH[i]<<" ";
 	fout.close();
